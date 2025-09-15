@@ -5,11 +5,13 @@ import { Employee } from 'src/admin/schema/employee-schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Role } from 'src/role/schema/role-schema';
 import { SetMetadata } from '@nestjs/common';
-import { Injectable, CanActivate, ExecutionContext,UnauthorizedException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { PassportStrategy } from '@nestjs/passport';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler,CanActivate,UnauthorizedException } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators'
 @Injectable()
 export class AuthService {
 
@@ -67,10 +69,14 @@ export class AuthService {
 
 
 
+
+    
+
+
+
 }
 
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
-
 
 
 
@@ -117,7 +123,18 @@ export class JwtAuthGuard extends AuthGuard('jwt') {}
 
 
 
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req = context.switchToHttp().getRequest();
+    const now = Date.now();
+    console.log(`Incoming Request: [${req.method}] ${req.url}`);
 
+    return next.handle().pipe(
+      tap(() => console.log(`Request handled in ${Date.now() - now}ms`)),
+    );
+  }
+}
 
 
 
