@@ -9,6 +9,7 @@ export class CreateEmpDto {
     name: string;
     @ApiProperty()
     @IsEmail()
+    @IsNotEmpty()
     email: string;
     @ApiProperty()
     @MinLength(6)

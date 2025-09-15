@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Get, Patch, Delete, Param, Query, Res } from '@nestjs/common';
+import type { Response } from 'express';
 import { AdminService } from './admin.service';
 import { CreateEmpDto } from './dto/create-emp.dto';
 import { UpdateEmpDto } from './dto/update-emp.dto';
@@ -21,10 +22,10 @@ export class AdminController {
     }
 
 
-    // @Get()
-    // findByDateRange(@Query('fromDate') fromDate: string, @Query('toDate') toDate: string, @Res() res: Response) {
-    //     return this.adminService.findByDateRange(fromDate, toDate,res);
-    // }
+    @Get()
+    findByDateRange(@Query('fromDate') fromDate: string, @Query('toDate') toDate: string, @Res() res: Response) {
+        return this.adminService.findByDateRange(fromDate, toDate,res);
+    }
 
 
 
