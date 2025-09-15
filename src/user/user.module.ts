@@ -4,11 +4,13 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user-schema';
 import { Employee,EmployeeSchema } from 'src/admin/schema/employee-schema';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
       MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, 
-                                {name: Employee.name, schema: EmployeeSchema} ]),
+                                { name: Employee.name, schema: EmployeeSchema }]),
+      AuthModule,
   ],
   controllers: [UserController],
   providers: [UserService]

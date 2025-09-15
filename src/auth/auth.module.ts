@@ -5,24 +5,23 @@ import { Employee, EmployeeSchema } from 'src/admin/schema/employee-schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { Role, RoleSchema } from 'src/role/schema/role-schema';
+import { JwtStrategy } from './auth.service'
 
 @Module({
 imports: [
-    PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
-      }),
+    PassportModule.register({ defaultStrategy: 'jwt' }), // 👈 register jwt
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'mySuperSecretKey',
+      signOptions: { expiresIn: '1d' },
     }),
-    MongooseModule.forFeature([{ name: Employee.name, schema: EmployeeSchema }]),
+    MongooseModule.forFeature([
+      {name: Employee.name, schema: EmployeeSchema},
+      {name: Role.name, schema: RoleSchema}]),
   ],
-  
+
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService,JwtStrategy],
+  exports: [AuthService]
 })
 export class AuthModule { }

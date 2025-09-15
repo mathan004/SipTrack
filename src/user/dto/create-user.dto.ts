@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength ,IsEnum} from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength ,IsEnum,IsString} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Session } from  '../schema/user-schema';
 
@@ -24,4 +24,15 @@ export class CreateUserDto {
     @IsNotEmpty() 
     totalPrice: number; 
 }
-  
+
+
+
+export class ChangePasswordDto {
+  @ApiProperty()
+  @IsString()
+  oldPassword: string;
+  @ApiProperty()
+  @IsString()
+  @MinLength(6)
+  newPassword: string;
+}
