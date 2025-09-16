@@ -1,7 +1,7 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthService } from 'src/auth/auth.service';
-import { Post, Get, Body, Param, Delete, Patch ,Req,ValidationPipe,UsePipes} from '@nestjs/common';
+import { Post, Get, Body, Param, Delete, Patch ,Req,ValidationPipe} from '@nestjs/common';
 import { CreateUserDto,ChangePasswordDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.service';
@@ -22,11 +22,11 @@ export class UserController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('employee')
-    @UsePipes(new ValidationPipe())
+    // @UsePipes(new ValidationPipe())
 
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto) {
+    create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
         return this.userService.create(createUserDto);
     }
 
