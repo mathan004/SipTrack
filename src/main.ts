@@ -1,8 +1,9 @@
 
-import { NestFactory } from '@nestjs/core';
+import { NestFactory} from '@nestjs/core';
 import { AppModule } from './app-module';
 import { DocumentBuilder,SwaggerModule } from '@nestjs/swagger';
 import {LoggingInterceptor} from './auth/auth.service';
+import { ValidationPipe } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -19,6 +20,8 @@ async function bootstrap() {
   SwaggerModule.setup('api-docs', app, document);
 
   app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
 
   await app.listen(process.env.PORT ||3000);
 }

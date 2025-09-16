@@ -30,7 +30,7 @@ export class RoleController {
     @Delete(':id')
     remove(@Body('id') id: string) {
         return this.roleService.remove(id);
-    }
+    } 
 
 
 
